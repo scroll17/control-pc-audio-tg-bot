@@ -2,10 +2,12 @@ import { Module } from '@nestjs/common';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BotModule } from './bot/bot.module';
+import { IntegrationModule } from "../integrations/integration.module";
 
 @Module({
   imports: [
     BotModule,
+    IntegrationModule,
     TelegrafModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
