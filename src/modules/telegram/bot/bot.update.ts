@@ -8,12 +8,15 @@ import {
   Start,
   Update,
 } from 'nestjs-telegraf';
-import { Context, Telegraf } from 'telegraf';
+import { Context, Telegraf, Markup } from 'telegraf';
 import { BotService } from './bot.service';
 import { TelegrafExceptionFilter } from '../common/filters';
 import { Logger, UseFilters, UseInterceptors } from '@nestjs/common';
 import { CurrentTelegramUser, TelegramAuth } from '../common/decorators';
 import { TelegrafLoggingInterceptor } from '../common/interceptors';
+
+// bot.hears('🔍 Search', ctx => ctx.reply('Yay!'))
+// bot.hears('📢 Ads', ctx => ctx.reply('Free hugs. Call now!'))
 
 @Update()
 @UseInterceptors(TelegrafLoggingInterceptor)
@@ -29,6 +32,16 @@ export class BotUpdate {
 
   @Start()
   async onStart(@Ctx() ctx: Context): Promise<string> {
+    await ctx.reply('Control audio buttons keyboard', Markup
+      .keyboard([
+        ['⏪ Prev', '⏯️ Play/Pause', '⏩ Next'],
+        ['🔽 Down vol', '🔼 Up vol'],
+        ['🎵 Info']
+      ])
+      .persistent()
+      .resize()
+    )
+
     return `Бот запущен`;
   }
 
@@ -60,5 +73,19 @@ export class BotUpdate {
     ].join('\n');
 
     return `${commands}\n\n${description}`;
+  }
+
+  @Command('/control')
+  @TelegramAuth()
+  async onTestCommand(@Ctx() ctx: Context) {
+    return ctx.reply('Control audio buttons keyboard', Markup
+      .keyboard([
+        ['⏪ Prev', '⏯️ Play/Pause', '⏩ Next'],
+        ['🔽 Down vol', '🔼 Up vol'],
+        ['🎵 Info']
+      ])
+      .persistent()
+      .resize()
+    )
   }
 }
