@@ -53,32 +53,12 @@ export class BotUpdate {
   @TelegramAuth()
   async onHelp(): Promise<string> {
     const commands = [
-      '/get_auth_token - Получить токен аутентификации',
-      '/get_client_url - Получить URL клиента',
-      '/get_server_url - Получить URL сервера',
+      '/none - Ничего',
     ].join('\n');
     const description = [
-      'URL клиента это ссылка на CRM сайт',
-      'Токен аутентификации используеться на стороне клиента',
-      'URL сервера также используеться на стороне клиента',
+      'Ничего',
     ].join('\n');
 
     return `${commands}\n\n${description}`;
-  }
-
-  @Command('get_auth_token')
-  @TelegramAuth()
-  async onGetAuthTokenCommand(
-    @CurrentTelegramUser() tgUser: any,
-    @Ctx() ctx: Context,
-  ): Promise<void> {
-    await ctx.replyWithMarkdown('none');
-  }
-
-  @Command('get_server_url')
-  @TelegramAuth()
-  async onGetServerUrlCommand(@Ctx() ctx: Context): Promise<void> {
-    // const message = await this.botService.getServerUrl();
-    // await ctx.replyWithMarkdown(message);
   }
 }
