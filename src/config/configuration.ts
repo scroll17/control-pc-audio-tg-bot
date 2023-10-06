@@ -7,6 +7,11 @@ export default () => {
     botName: process.env.TELEGRAM_BOT_NAME,
   };
 
+  const user = {
+    username: process.env.TELEGRAM_USER_NAME,
+    chatId: process.env.TELEGRAM_USER_CHAT_ID,
+  };
+
   return {
     port: PORT,
     host: `http://localhost:${PORT}`,
@@ -14,5 +19,6 @@ export default () => {
     isDev: process.env.NODE_ENV === 'development',
     isProd: process.env.NODE_ENV === 'production',
     telegram,
+    user
   };
 };
