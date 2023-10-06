@@ -4,6 +4,7 @@
 /lib
 /src/data/cache
 package-lock.json
+/bin/nowplaying-cli
 
 # Env
 .env
