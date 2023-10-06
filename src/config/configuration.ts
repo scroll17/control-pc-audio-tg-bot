@@ -12,6 +12,10 @@ export default () => {
     chatId: parseInt(process.env.TELEGRAM_USER_CHAT_ID, 10),
   };
 
+  const macos = {
+    cliToolName: process.env.MAC_OS_CLI_TOOL_NAME
+  };
+
   return {
     port: PORT,
     host: `http://localhost:${PORT}`,
@@ -19,6 +23,7 @@ export default () => {
     isDev: process.env.NODE_ENV === 'development',
     isProd: process.env.NODE_ENV === 'production',
     telegram,
-    user
+    user,
+    macos
   };
 };
