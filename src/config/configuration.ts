@@ -9,7 +9,7 @@ export default () => {
 
   const user = {
     username: process.env.TELEGRAM_USER_NAME,
-    chatId: process.env.TELEGRAM_USER_CHAT_ID,
+    chatId: parseInt(process.env.TELEGRAM_USER_CHAT_ID, 10),
   };
 
   return {

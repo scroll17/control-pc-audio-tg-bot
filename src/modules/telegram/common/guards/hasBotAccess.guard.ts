@@ -1,13 +1,13 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+import {CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable, Logger} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TelegrafExecutionContext } from 'nestjs-telegraf';
 import { Context } from 'telegraf';
 
 @Injectable()
 export class TelegrafHasBotAccessGuard implements CanActivate {
+  private readonly logger = new Logger(this.constructor.name);
+
   constructor(
-    private reflector: Reflector,
     private configService: ConfigService,
   ) {}
 
@@ -15,14 +15,16 @@ export class TelegrafHasBotAccessGuard implements CanActivate {
     const telegramContext =
       TelegrafExecutionContext.create(context).getContext<Context>();
 
+    const userId = this.configService.getOrThrow('user.chatId');
+    const messageUserId = telegramContext.update['message'].from.id;
+
+    if (userId !== messageUserId) {
+      this.logger.warn('Request from unknown user', {
+        message: telegramContext.update['message']
+      })
+      throw new HttpException(`You haven't access`, HttpStatus.FORBIDDEN);
+    }
+
     return true;
-    // const user = await this.userService.getByTelegram(
-    //   telegramContext.update['message'].from.id,
-    // );
-    // if (!user) {
-    //   throw new Error(`You haven't access`);
-    // }
-    //
-    // return user.hasBotAccess;
   }
 }
