@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { TelegrafExecutionContext } from 'nestjs-telegraf';
+import {tap} from "rxjs/operators";
 
 @Injectable()
 export class TelegrafLoggingInterceptor implements NestInterceptor {
@@ -28,6 +29,11 @@ export class TelegrafLoggingInterceptor implements NestInterceptor {
       },
     });
 
-    return next.handle();
+    const now = Date.now();
+    return next
+      .handle()
+      .pipe(
+        tap(() => this.logger.debug(`Execution time: ${Date.now() - now}ms`)),
+      );
   }
 }
